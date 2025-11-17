@@ -1,8 +1,12 @@
 #include "AVLTree.h"
-
 #include <string>
+using namespace std;
 
 size_t AVLTree::AVLNode::numChildren() const {
+    return 0;
+}
+
+size_t AVLTree::AVLNode::getHeight() const {
     return 0;
 }
 
@@ -10,8 +14,8 @@ bool AVLTree::AVLNode::isLeaf() const {
     return false;
 }
 
-size_t AVLTree::AVLNode::getHeight() const {
-    return 0;
+bool AVLTree::remove(AVLNode*& current, KeyType key) {
+    return false;
 }
 
 bool AVLTree::removeNode(AVLNode*& current){
@@ -21,20 +25,21 @@ bool AVLTree::removeNode(AVLNode*& current){
 
     AVLNode* toDelete = current;
     auto nChildren = current->numChildren();
+
+    // case 1 we can delete the node
     if (current->isLeaf()) {
-        // case 1 we can delete the node
         current = nullptr;
+    // case 2 - replace current with its only child
     } else if (current->numChildren() == 1) {
-        // case 2 - replace current with its only child
         if (current->right) {
             current = current->right;
         } else {
             current = current->left;
         }
+    // case 3 - we have two children,
+    // get the smallest key in right subtree by
+    // getting right child and go left until left is null
     } else {
-        // case 3 - we have two children,
-        // get smallest key in right subtree by
-        // getting right child and go left until left is null
         AVLNode* smallestInRight = current->right;
         // I could check if smallestInRight is null,
         // but it shouldn't be since the node has two children
@@ -47,7 +52,6 @@ bool AVLTree::removeNode(AVLNode*& current){
 
         current->key = newKey;
         current->value = newValue;
-
         current->height = current->getHeight();
         balanceNode(current);
 
@@ -58,9 +62,5 @@ bool AVLTree::removeNode(AVLNode*& current){
     return true;
 }
 
-bool AVLTree::remove(AVLNode *&current, KeyType key) {
-    return false;
-}
-
-void AVLTree::balanceNode(AVLNode *&node) {
+void AVLTree::balanceNode(AVLNode*& node) {
 }

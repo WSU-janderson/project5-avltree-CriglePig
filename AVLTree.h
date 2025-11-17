@@ -1,4 +1,4 @@
-/**
+/*
  * AVLTree.h
  */
 
@@ -9,13 +9,13 @@
 using namespace std;
 
 class AVLTree {
-public:
+    public:
     using KeyType = std::string;
     using ValueType = size_t;
 
-protected:
+    protected:
     class AVLNode {
-    public:
+        public:
         KeyType key;
         ValueType value;
         size_t height;
@@ -25,18 +25,13 @@ protected:
 
         // 0, 1 or 2
         size_t numChildren() const;
-        // true or false
-        bool isLeaf() const;
         // number of hops to deepest leaf node
         size_t getHeight() const;
-
-
+        // true or false
+        bool isLeaf() const;
     };
 
-public:
-
-
-
+    public:
 
     private:
     AVLNode* root;
@@ -44,11 +39,10 @@ public:
     /* Helper methods for remove */
     // this overloaded remove will do the recursion to remove the node
     bool remove(AVLNode*& current, KeyType key);
-    // removeNode contains the logic for actually removing a node based on the numebr of children
+    // removeNode contains the logic for actually removing a node based on the number of children
     bool removeNode(AVLNode*& current);
     // You will implement this, but it is needed for removeNode()
     void balanceNode(AVLNode*& node);
-
 };
 
 #endif //AVLTREE_H
