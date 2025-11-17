@@ -1,5 +1,7 @@
 #include "AVLTree.h"
+#include <optional>
 #include <string>
+#include <vector>
 using namespace std;
 
 size_t AVLTree::AVLNode::numChildren() const {
@@ -12,6 +14,38 @@ size_t AVLTree::AVLNode::getHeight() const {
 
 bool AVLTree::AVLNode::isLeaf() const {
     return false;
+}
+
+AVLTree::AVLTree(const AVLTree& other) {
+
+}
+
+AVLTree::~AVLTree() {
+
+}
+
+size_t AVLTree::size() const {
+
+}
+
+size_t AVLTree::getHeight() const {
+
+}
+
+size_t& AVLTree::operator[](const std::string& key) {
+
+}
+
+void AVLTree::operator=(const AVLTree& other) {
+
+}
+
+bool AVLTree::insert(const std::string& key, size_t value) {
+
+}
+
+bool AVLTree::remove(const std::string& key) {
+
 }
 
 bool AVLTree::remove(AVLNode*& current, KeyType key) {
@@ -63,4 +97,20 @@ bool AVLTree::removeNode(AVLNode*& current){
 }
 
 void AVLTree::balanceNode(AVLNode*& node) {
+}
+
+bool AVLTree::contains(const std::string& key) const {
+
+}
+
+optional<size_t> AVLTree::get(const std::string& key) const {
+
+}
+
+vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const {
+
+}
+
+vector<std::string> AVLTree::keys() const {
+
 }
