@@ -23,6 +23,8 @@ class AVLTree {
         AVLNode* left;
         AVLNode* right;
 
+        AVLNode(const KeyType& key, ValueType value);
+
         // 0, 1 or 2
         size_t numChildren() const;
         // number of hops to deepest leaf node
@@ -32,6 +34,8 @@ class AVLTree {
     };
 
     public:
+    AVLTree();
+
     AVLTree(const AVLTree& other);
 
     ~AVLTree();
@@ -43,6 +47,8 @@ class AVLTree {
     size_t &operator[](const std::string& key);
 
     void operator=(const AVLTree& other);
+
+    friend std::ostream& operator<<(std::ostream& os, const AVLTree& avlTree);
 
     bool insert(const std::string& key, size_t value);
 

@@ -4,6 +4,15 @@
 #include <vector>
 using namespace std;
 
+/* AVLNode */
+AVLTree::AVLNode::AVLNode(const KeyType& key, ValueType value) {
+    this->key = key;
+    this->value = value;
+    height = 0;
+    left = nullptr;
+    right = nullptr;
+}
+
 size_t AVLTree::AVLNode::numChildren() const {
     return 0;
 }
@@ -14,6 +23,12 @@ size_t AVLTree::AVLNode::getHeight() const {
 
 bool AVLTree::AVLNode::isLeaf() const {
     return false;
+}
+
+/* AVLTree */
+AVLTree::AVLTree() {
+    root = nullptr;
+    treeSize = 0;
 }
 
 AVLTree::AVLTree(const AVLTree& other) {
@@ -37,6 +52,10 @@ size_t& AVLTree::operator[](const std::string& key) {
 }
 
 void AVLTree::operator=(const AVLTree& other) {
+
+}
+
+ostream& operator<<(ostream& os, const AVLTree& avlTree) {
 
 }
 
@@ -97,6 +116,7 @@ bool AVLTree::removeNode(AVLNode*& current){
 }
 
 void AVLTree::balanceNode(AVLNode*& node) {
+
 }
 
 bool AVLTree::contains(const std::string& key) const {
