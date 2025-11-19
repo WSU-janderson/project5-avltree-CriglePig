@@ -14,15 +14,20 @@ AVLTree::AVLNode::AVLNode(const KeyType& key, ValueType value) {
 }
 
 size_t AVLTree::AVLNode::numChildren() const {
-    return 0;
+    size_t nChildren = 0;
+
+    if (left) nChildren++;
+    if (right) nChildren++;
+
+    return nChildren;
 }
 
 size_t AVLTree::AVLNode::getHeight() const {
-    return 0;
+    return height;
 }
 
 bool AVLTree::AVLNode::isLeaf() const {
-    return false;
+    return height == 0;
 }
 
 /* AVLTree */
