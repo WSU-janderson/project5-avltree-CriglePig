@@ -40,7 +40,7 @@ class AVLTree {
 
     ~AVLTree();
 
-    AVLNode* search(AVLNode* node, const std::string& key);
+    AVLNode* search(AVLNode* node, const std::string& key) const;
 
     size_t size() const;
 
@@ -53,6 +53,8 @@ class AVLTree {
     friend std::ostream& operator<<(std::ostream& os, const AVLTree& avlTree);
 
     bool insert(const std::string& key, size_t value);
+
+    AVLNode*& insert(AVLNode*& node, const std::string& newKey, size_t value);
 
     bool remove(const std::string& key);
 

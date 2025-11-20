@@ -44,7 +44,7 @@ AVLTree::~AVLTree() {
 
 }
 
-AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) {
+AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) const {
     if (node == nullptr) {
         return nullptr;
     }
@@ -85,7 +85,27 @@ ostream& operator<<(ostream& os, const AVLTree& avlTree) {
 }
 
 bool AVLTree::insert(const std::string& key, size_t value) {
+    AVLNode*& inserted = insert(root, key, value);
 
+    balanceNode(inserted);
+    return true;
+}
+
+AVLTree::AVLNode*& AVLTree::insert(AVLNode*& node, const std::string& newKey, size_t value) {
+    if (node == nullptr) {
+        node = new AVLNode(newKey, value);
+        return node;
+    }
+
+    if (newKey < node->key) {
+        return insert(node->left, newKey, value);
+    }
+
+    if (newKey > node->key) {
+        return insert(node->right, newKey, value);
+    }
+
+    return node;
 }
 
 bool AVLTree::remove(const std::string& key) {
@@ -145,7 +165,7 @@ void AVLTree::balanceNode(AVLNode*& node) {
 }
 
 bool AVLTree::contains(const std::string& key) const {
-
+    return search(root, key);
 }
 
 optional<size_t> AVLTree::get(const std::string& key) const {
