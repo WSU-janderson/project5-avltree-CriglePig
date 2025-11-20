@@ -40,6 +40,8 @@ class AVLTree {
 
     ~AVLTree();
 
+    AVLNode* search(AVLNode* node, const std::string& key);
+
     size_t size() const;
 
     size_t getHeight() const;

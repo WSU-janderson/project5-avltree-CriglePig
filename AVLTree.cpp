@@ -44,12 +44,32 @@ AVLTree::~AVLTree() {
 
 }
 
-size_t AVLTree::size() const {
+AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) {
+    if (node == nullptr) {
+        return nullptr;
+    }
 
+    if (searchKey == node->key) {
+        return node;
+    }
+
+    if (searchKey < node->key) {
+        return search(node->left, searchKey);
+    }
+
+    if (searchKey > node->key) {
+        return search(node->right, searchKey);
+    }
+
+    return nullptr;
+}
+
+size_t AVLTree::size() const {
+    return treeSize;
 }
 
 size_t AVLTree::getHeight() const {
-
+    return root->height;
 }
 
 size_t& AVLTree::operator[](const std::string& key) {
