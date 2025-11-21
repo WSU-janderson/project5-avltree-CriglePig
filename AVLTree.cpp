@@ -168,17 +168,31 @@ void AVLTree::balanceNode(AVLNode*& node) {
 }
 
 void AVLTree::updateHeight(AVLNode*& parentNode) {
-    size_t leftHeight = -1;
+    int leftHeight = -1;
     if (parentNode->left) {
-        leftHeight = parentNode->left->height;
+        leftHeight = static_cast<int>(parentNode->left->height);
     }
 
-    size_t rightHeight = -1;
+    int rightHeight = -1;
     if (parentNode->right) {
-     rightHeight = parentNode->right->height;
+        rightHeight = static_cast<int>(parentNode->right->height);
     }
 
     parentNode->height = max(leftHeight, rightHeight) + 1;
+}
+
+int AVLTree::getBalance(AVLNode*& parentNode) {
+    int leftHeight = -1;
+    if (parentNode->left) {
+        leftHeight =  static_cast<int>(parentNode->left->height);
+    }
+
+    int rightHeight = -1;
+    if (parentNode->right) {
+        rightHeight = static_cast<int>(parentNode->right->height);
+    }
+
+    return leftHeight - rightHeight;
 }
 
 bool AVLTree::contains(const std::string& key) const {

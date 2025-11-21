@@ -81,6 +81,8 @@ class AVLTree {
     void balanceNode(AVLNode*& node);
 
     void updateHeight(AVLNode *&parentNode);
+
+    int getBalance(AVLNode *&parentNode);
 };
 
 #endif //AVLTREE_H
