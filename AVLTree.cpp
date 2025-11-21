@@ -85,27 +85,27 @@ ostream& operator<<(ostream& os, const AVLTree& avlTree) {
 }
 
 bool AVLTree::insert(const std::string& key, size_t value) {
-    AVLNode*& inserted = insert(root, key, value);
+    AVLNode*& inserted = insertNode(root, key, value);
 
     balanceNode(inserted);
     return true;
 }
 
-AVLTree::AVLNode*& AVLTree::insert(AVLNode*& node, const std::string& newKey, size_t value) {
-    if (node == nullptr) {
-        node = new AVLNode(newKey, value);
-        return node;
+AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& newKey, size_t value) {
+    if (current == nullptr) {
+        current = new AVLNode(newKey, value);
+        return current;
     }
 
-    if (newKey < node->key) {
-        return insert(node->left, newKey, value);
+    if (newKey < current->key) {
+        return insertNode(current->left, newKey, value);
     }
 
-    if (newKey > node->key) {
-        return insert(node->right, newKey, value);
+    if (newKey > current->key) {
+        return insertNode(current->right, newKey, value);
     }
 
-    return node;
+    return current;
 }
 
 bool AVLTree::remove(const std::string& key) {
@@ -161,7 +161,24 @@ bool AVLTree::removeNode(AVLNode*& current){
 }
 
 void AVLTree::balanceNode(AVLNode*& node) {
+    AVLNode*& hook = node;
 
+
+
+}
+
+void AVLTree::updateHeight(AVLNode*& parentNode) {
+    size_t leftHeight = -1;
+    if (parentNode->left) {
+        leftHeight = parentNode->left->height;
+    }
+
+    size_t rightHeight = -1;
+    if (parentNode->right) {
+     rightHeight = parentNode->right->height;
+    }
+
+    parentNode->height = max(leftHeight, rightHeight) + 1;
 }
 
 bool AVLTree::contains(const std::string& key) const {

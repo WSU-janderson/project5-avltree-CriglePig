@@ -54,7 +54,7 @@ class AVLTree {
 
     bool insert(const std::string& key, size_t value);
 
-    AVLNode*& insert(AVLNode*& node, const std::string& newKey, size_t value);
+    AVLNode*& insertNode(AVLNode*& current, const std::string& newKey, size_t value);
 
     bool remove(const std::string& key);
 
@@ -79,6 +79,8 @@ class AVLTree {
 
     // You will implement this, but it is needed for removeNode()
     void balanceNode(AVLNode*& node);
+
+    void updateHeight(AVLNode *&parentNode);
 };
 
 #endif //AVLTREE_H
