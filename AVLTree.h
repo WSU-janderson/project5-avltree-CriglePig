@@ -69,9 +69,9 @@ class AVLTree {
     AVLNode* root;
     size_t treeSize;
 
-    AVLNode* copyNode(const AVLNode* node, AVLNode* parent);
+    AVLNode* copy(const AVLNode* node, AVLNode* parent);
 
-    void clearNode(AVLNode *node);
+    void clear(AVLNode *node);
 
     bool insertNode(AVLNode*& current, AVLNode* parent, const std::string& newKey, size_t value);
 

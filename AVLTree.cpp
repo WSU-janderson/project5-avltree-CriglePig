@@ -34,34 +34,36 @@ AVLTree::AVLTree() {
     treeSize = 0;
 }
 
-AVLTree::AVLNode* AVLTree::copyNode(const AVLNode* node, AVLNode* parent) {
+AVLTree::AVLNode* AVLTree::copy(const AVLNode* node, AVLNode* parent) {
     if (!node) {
         return nullptr;
     }
     AVLNode* newNode = new AVLNode(node->key, node->value);
     newNode->parent = parent;
     newNode->height = node->height;
-    newNode->left = copyNode(node->left, newNode);
-    newNode->right = copyNode(node->right, newNode);
+    newNode->left = copy(node->left, newNode);
+    newNode->right = copy(node->right, newNode);
     return newNode;
 }
 
 AVLTree::AVLTree(const AVLTree& other) {
-    root = copyNode(other.root, nullptr);
+    root = copy(other.root, nullptr);
     treeSize = other.treeSize;
 }
 
-void AVLTree::clearNode(AVLNode* node) {
+void AVLTree::clear(AVLNode* node) {
     if (!node) {
         return;
     }
-    clearNode(node->left);
-    clearNode(node->right);
+    clear(node->left);
+    clear(node->right);
     delete node;
 }
 
 AVLTree::~AVLTree() {
-    clearNode(root);
+    clear(root);
+    root = nullptr;
+    treeSize = 0;
 }
 
 AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) const {
@@ -98,8 +100,8 @@ size_t& AVLTree::operator[](const std::string& key) {
 
 void AVLTree::operator=(const AVLTree& other) {
     if (this == &other) return;
-    clearNode(root);
-    root = copyNode(other.root, nullptr);
+    clear(root);
+    root = copy(other.root, nullptr);
     treeSize = other.treeSize;
 }
 
