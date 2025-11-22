@@ -84,13 +84,6 @@ ostream& operator<<(ostream& os, const AVLTree& avlTree) {
 
 }
 
-bool AVLTree::insert(const std::string& key, size_t value) {
-    AVLNode*& inserted = insertNode(root, key, value);
-
-    balanceNode(inserted);
-    return true;
-}
-
 AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& newKey, size_t value) {
     if (current == nullptr) {
         current = new AVLNode(newKey, value);
@@ -106,6 +99,13 @@ AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& new
     }
 
     return current;
+}
+
+bool AVLTree::insert(const std::string& key, size_t value) {
+    AVLNode*& inserted = insertNode(root, key, value);
+
+    rebalanceNode(inserted);
+    return true;
 }
 
 bool AVLTree::remove(const std::string& key) {
@@ -193,6 +193,88 @@ int AVLTree::getBalance(AVLNode*& parentNode) {
     }
 
     return leftHeight - rightHeight;
+}
+
+bool AVLTree::setChild(AVLNode*& parent, const string& whichChild, AVLNode*& child) {
+    if (whichChild != "left" && whichChild != "right") {
+        return false;
+    }
+
+    if (whichChild == "left") {
+        parent->left = child;
+    } else {
+        parent->right = child;
+    }
+
+    if (child) {
+        child->parent = parent;
+    }
+
+    updateHeight(parent);
+    return true;
+}
+
+bool AVLTree::replaceChild(AVLNode*& parent, AVLNode*& currentChild, AVLNode*& newChild) {
+    if (parent->left == currentChild) {
+        return setChild(parent, "left", newChild);
+    } else if (parent->right == currentChild) {
+        return setChild(parent, "right", newChild);
+    }
+    return false;
+}
+
+AVLTree::AVLNode* AVLTree::rotateRight(AVLNode*& node) {
+    AVLNode* leftRightChild = node->left->right;
+    AVLNode* newRoot = node->left;
+
+    if (node->parent) {
+        replaceChild(node->parent, node, node->left);
+    } else { // node is root
+        root = node->left;
+        root->parent = nullptr;
+    }
+
+    setChild(node->left, "right", node);
+    setChild(node, "left", leftRightChild);
+
+    return newRoot;
+}
+
+AVLTree::AVLNode* AVLTree::rotateLeft(AVLNode*& node) {
+    AVLNode* rightLeftChild = node->right->left;
+    AVLNode* newRoot = node->right;
+
+    if (node->parent) {
+        replaceChild(node->parent, node, node->right);
+    } else { // node is root
+        root = newRoot;
+        root->parent = nullptr;
+    }
+
+    setChild(node->right, "left", node);
+    setChild(node, "right", rightLeftChild);
+
+    return newRoot;
+}
+
+AVLTree::AVLNode* AVLTree::rebalanceNode(AVLNode*& node) {
+    updateHeight(node);
+    // Right heavy case
+    if (getBalance(node) == -2) {
+        // Double rotation case
+        if (getBalance(node->right) == 1) {
+            rotateRight(node->right);
+        }
+        return rotateLeft(node);
+    // Left heavy case
+    } else if (getBalance(node) == 2) {
+        // Double rotation case
+        if (getBalance(node->left) == -1) {
+            rotateLeft(node->left);
+        }
+        return rotateRight(node);
+    }
+    return node;
 }
 
 bool AVLTree::contains(const std::string& key) const {

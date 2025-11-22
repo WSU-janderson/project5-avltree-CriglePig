@@ -20,6 +20,7 @@ class AVLTree {
         ValueType value;
         size_t height;
 
+        AVLNode* parent;
         AVLNode* left;
         AVLNode* right;
 
@@ -54,8 +55,6 @@ class AVLTree {
 
     bool insert(const std::string& key, size_t value);
 
-    AVLNode*& insertNode(AVLNode*& current, const std::string& newKey, size_t value);
-
     bool remove(const std::string& key);
 
     bool contains(const std::string& key) const;
@@ -70,6 +69,22 @@ class AVLTree {
     AVLNode* root;
     size_t treeSize;
 
+    AVLNode*& insertNode(AVLNode*& current, const std::string& newKey, size_t value);
+
+    void updateHeight(AVLNode*& parentNode);
+
+    int getBalance(AVLNode*& parentNode);
+
+    bool setChild(AVLNode*& parent, const std::string& whichChild, AVLNode*& child);
+
+    bool replaceChild(AVLNode*& parent, AVLNode*& currentChild, AVLNode*& newChild);
+
+    AVLNode* rotateRight(AVLNode*& node);
+
+    AVLNode* rotateLeft(AVLNode*& node);
+
+    AVLNode* rebalanceNode(AVLNode*& node);
+
     /* Helper methods for remove */
     // this overloaded remove will do the recursion to remove the node
     bool remove(AVLNode*& current, KeyType key);
@@ -79,10 +94,6 @@ class AVLTree {
 
     // You will implement this, but it is needed for removeNode()
     void balanceNode(AVLNode*& node);
-
-    void updateHeight(AVLNode *&parentNode);
-
-    int getBalance(AVLNode *&parentNode);
 };
 
 #endif //AVLTREE_H
