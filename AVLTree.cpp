@@ -97,7 +97,10 @@ size_t& AVLTree::operator[](const std::string& key) {
 }
 
 void AVLTree::operator=(const AVLTree& other) {
-
+    if (this == &other) return;
+    clearNode(root);
+    root = copyNode(other.root, nullptr);
+    treeSize = other.treeSize;
 }
 
 ostream& operator<<(ostream& os, const AVLTree& avlTree) {
