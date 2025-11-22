@@ -356,6 +356,15 @@ vector<size_t> AVLTree::findRange(const std::string& lowKey, const std::string& 
     return result;
 }
 
-vector<std::string> AVLTree::keys() const {
+void AVLTree::collectKeys(const AVLNode* node, vector<string>& result) {
+    if (!node) return;
+    collectKeys(node->left, result);
+    result.push_back(node->key);
+    collectKeys(node->right, result);
+}
 
+vector<std::string> AVLTree::keys() const {
+    vector<std::string> result;
+    collectKeys(root, result);
+    return result;
 }

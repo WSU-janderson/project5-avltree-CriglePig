@@ -61,13 +61,6 @@ class AVLTree {
 
     [[nodiscard]] std::optional<size_t> get(const std::string& key) const;
 
-    static void collectInRange(
-        const AVLNode* node,
-        const std::string& lowKey,
-        const std::string& highKey,
-        std::vector<size_t>& result
-    );
-
     [[nodiscard]] std::vector<size_t> findRange(const std::string& lowKey, const std::string& highKey) const;
 
     [[nodiscard]] std::vector<std::string> keys() const;
@@ -75,6 +68,15 @@ class AVLTree {
     private:
     AVLNode* root;
     size_t treeSize;
+
+    static void collectInRange(
+        const AVLNode* node,
+        const std::string& lowKey,
+        const std::string& highKey,
+        std::vector<size_t>& result
+    );
+
+    static void collectKeys(const AVLNode *node, std::vector<std::string> &result);
 
     void printInOrder(std::ostream& os, const AVLNode* node) const;
 
