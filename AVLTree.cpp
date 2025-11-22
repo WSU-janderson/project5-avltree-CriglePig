@@ -1,14 +1,16 @@
 #include "AVLTree.h"
+#include <iostream>
 #include <optional>
 #include <string>
 #include <vector>
 using namespace std;
 
 /* AVLNode */
-AVLTree::AVLNode::AVLNode(const KeyType& key, ValueType value) {
+AVLTree::AVLNode::AVLNode(const KeyType& key, const ValueType value) {
     this->key = key;
     this->value = value;
     height = 0;
+    parent = nullptr;
     left = nullptr;
     right = nullptr;
 }
@@ -105,8 +107,16 @@ void AVLTree::operator=(const AVLTree& other) {
     treeSize = other.treeSize;
 }
 
-ostream& operator<<(ostream& os, const AVLTree& avlTree) {
+void AVLTree::printInOrder(ostream& os, const AVLNode* node) const {
+    if (!node) return;
+    printInOrder(os, node->left);
+    os << node->key << " ";
+    printInOrder(os, node->right);
+}
 
+ostream& operator<<(ostream& os, const AVLTree& tree) {
+    tree.printInOrder(os, tree.root);
+    return os;
 }
 
 void AVLTree::updateHeight(AVLNode*& parentNode) {
@@ -320,11 +330,11 @@ optional<size_t> AVLTree::get(const std::string& key) const {
 }
 
 void AVLTree::collectInRange(
-    AVLNode* node,
+    const AVLNode* node,
     const std::string& lowKey,
     const std::string& highKey,
-    vector<size_t>& result)
-const {
+    vector<size_t>& result
+) {
     if (!node) return;
 
     if (node->key > lowKey) {

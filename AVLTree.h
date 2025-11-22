@@ -27,11 +27,11 @@ class AVLTree {
         AVLNode(const KeyType& key, ValueType value);
 
         // 0, 1 or 2
-        size_t numChildren() const;
+        [[nodiscard]] size_t numChildren() const;
         // number of hops to deepest leaf node
-        size_t getHeight() const;
+        [[nodiscard]] size_t getHeight() const;
         // true or false
-        bool isLeaf() const;
+        [[nodiscard]] bool isLeaf() const;
     };
 
     public:
@@ -43,65 +43,62 @@ class AVLTree {
 
     AVLNode* search(AVLNode* node, const std::string& key) const;
 
-    size_t size() const;
+    [[nodiscard]] size_t size() const;
 
-    size_t getHeight() const;
+    [[nodiscard]] size_t getHeight() const;
 
     size_t &operator[](const std::string& key);
 
     void operator=(const AVLTree& other);
 
-    friend std::ostream& operator<<(std::ostream& os, const AVLTree& avlTree);
+    friend std::ostream& operator<<(std::ostream& os, const AVLTree& tree);
 
     bool insert(const std::string& key, size_t value);
 
     bool remove(const std::string& key);
 
-    bool contains(const std::string& key) const;
+    [[nodiscard]] bool contains(const std::string& key) const;
 
-    std::optional<size_t> get(const std::string& key) const;
+    [[nodiscard]] std::optional<size_t> get(const std::string& key) const;
 
-    void collectInRange(
-        AVLNode *node,
-        const std::string &lowKey,
-        const std::string &highKey,
-        std::vector<unsigned long long> &result
-    ) const;
+    static void collectInRange(
+        const AVLNode* node,
+        const std::string& lowKey,
+        const std::string& highKey,
+        std::vector<size_t>& result
+    );
 
-    std::vector<size_t> findRange(const std::string& lowKey, const std::string& highKey) const;
+    [[nodiscard]] std::vector<size_t> findRange(const std::string& lowKey, const std::string& highKey) const;
 
-    std::vector<std::string> keys() const;
+    [[nodiscard]] std::vector<std::string> keys() const;
 
     private:
     AVLNode* root;
     size_t treeSize;
 
+    void printInOrder(std::ostream& os, const AVLNode* node) const;
+
     AVLNode* copy(const AVLNode* node, AVLNode* parent);
 
-    void clear(AVLNode *node);
+    void clear(AVLNode* node);
 
     bool insertNode(AVLNode*& current, AVLNode* parent, const std::string& newKey, size_t value);
 
-    void updateHeight(AVLNode*& parentNode);
+    bool removeNode(AVLNode*& current);
 
-    int getBalance(AVLNode*& parentNode);
+    static void updateHeight(AVLNode*& parentNode);
 
-    bool setChild(AVLNode*& parent, const std::string& whichChild, AVLNode*& child);
+    static int getBalance(AVLNode*& parentNode);
 
-    bool replaceChild(AVLNode*& parent, AVLNode*& currentChild, AVLNode*& newChild);
+    static bool setChild(AVLNode*& parent, const std::string& whichChild, AVLNode*& child);
+
+    static bool replaceChild(AVLNode*& parent, AVLNode*& currentChild, AVLNode*& newChild);
 
     AVLNode* rotateRight(AVLNode*& node);
 
     AVLNode* rotateLeft(AVLNode*& node);
 
     AVLNode* rebalanceNode(AVLNode*& node);
-
-    /* Helper methods for remove */
-    // this overloaded remove will do the recursion to remove the node
-    bool remove(AVLNode*& current, KeyType key);
-
-    // removeNode contains the logic for actually removing a node based on the number of children
-    bool removeNode(AVLNode*& current);
 };
 
 #endif //AVLTREE_H
