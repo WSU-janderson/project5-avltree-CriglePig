@@ -51,8 +51,17 @@ AVLTree::AVLTree(const AVLTree& other) {
     treeSize = other.treeSize;
 }
 
-AVLTree::~AVLTree() {
+void AVLTree::clearNode(AVLNode* node) {
+    if (!node) {
+        return;
+    }
+    clearNode(node->left);
+    clearNode(node->right);
+    delete node;
+}
 
+AVLTree::~AVLTree() {
+    clearNode(root);
 }
 
 AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) const {

@@ -71,6 +71,8 @@ class AVLTree {
 
     AVLNode* copyNode(const AVLNode* node, AVLNode* parent);
 
+    void clearNode(AVLNode *node);
+
     bool insertNode(AVLNode*& current, AVLNode* parent, const std::string& newKey, size_t value);
 
     void updateHeight(AVLNode*& parentNode);
