@@ -61,7 +61,14 @@ class AVLTree {
 
     std::optional<size_t> get(const std::string& key) const;
 
-    std::vector<std::string> findRange(const std::string& lowKey, const std::string& highKey) const;
+    void collectInRange(
+        AVLNode *node,
+        const std::string &lowKey,
+        const std::string &highKey,
+        std::vector<unsigned long long> &result
+    ) const;
+
+    std::vector<size_t> findRange(const std::string& lowKey, const std::string& highKey) const;
 
     std::vector<std::string> keys() const;
 

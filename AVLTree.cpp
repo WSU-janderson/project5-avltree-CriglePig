@@ -319,8 +319,31 @@ optional<size_t> AVLTree::get(const std::string& key) const {
     return nullopt;
 }
 
-vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const {
+void AVLTree::collectInRange(
+    AVLNode* node,
+    const std::string& lowKey,
+    const std::string& highKey,
+    vector<size_t>& result)
+const {
+    if (!node) return;
 
+    if (node->key > lowKey) {
+        collectInRange(node->left, lowKey, highKey, result);
+    }
+
+    if (node->key >= lowKey && node->key <= highKey) {
+        result.push_back(node->value);
+    }
+
+    if (node->key < highKey) {
+        collectInRange(node->right, lowKey, highKey, result);
+    }
+}
+
+vector<size_t> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const {
+    vector<size_t> result;
+    collectInRange(root, lowKey, highKey, result);
+    return result;
 }
 
 vector<std::string> AVLTree::keys() const {
