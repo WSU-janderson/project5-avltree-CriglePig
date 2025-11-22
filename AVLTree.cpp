@@ -70,7 +70,8 @@ size_t AVLTree::getHeight() const {
 }
 
 size_t& AVLTree::operator[](const std::string& key) {
-
+    AVLNode* node = search(root, key);
+    return node->value;
 }
 
 void AVLTree::operator=(const AVLTree& other) {
@@ -204,7 +205,13 @@ AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& new
 
 bool AVLTree::insert(const std::string& key, size_t value) {
     AVLNode*& inserted = insertNode(root, key, value);
-    rebalanceNode(inserted);
+    AVLNode* node = inserted->parent;
+    while (node) {
+        AVLNode* parent = node->parent;
+        rebalanceNode(node);
+        node = parent;
+    }
+    treeSize++;
     return true;
 }
 
@@ -263,7 +270,12 @@ bool AVLTree::removeNode(AVLNode*& current) {
 
 bool AVLTree::remove(const std::string& key) {
     AVLNode* node = search(root, key);
-    removeNode(node);
+    if (node) {
+        const bool result = removeNode(node);
+        treeSize--;
+        return result;
+    }
+    return false;
 }
 
 bool AVLTree::contains(const std::string& key) const {
