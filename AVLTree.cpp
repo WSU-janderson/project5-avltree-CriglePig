@@ -307,7 +307,11 @@ bool AVLTree::contains(const std::string& key) const {
 }
 
 optional<size_t> AVLTree::get(const std::string& key) const {
-
+    AVLNode* node = search(root, key);
+    if (node) {
+        return node->value;
+    }
+    return nullopt;
 }
 
 vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const {
