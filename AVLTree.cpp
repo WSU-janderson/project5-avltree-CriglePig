@@ -15,10 +15,8 @@ AVLTree::AVLNode::AVLNode(const KeyType& key, ValueType value) {
 
 size_t AVLTree::AVLNode::numChildren() const {
     size_t nChildren = 0;
-
     if (left) nChildren++;
     if (right) nChildren++;
-
     return nChildren;
 }
 
@@ -60,7 +58,6 @@ AVLTree::AVLNode* AVLTree::search(AVLNode* node, const std::string& searchKey) c
     if (searchKey > node->key) {
         return search(node->right, searchKey);
     }
-
     return nullptr;
 }
 
@@ -84,89 +81,6 @@ ostream& operator<<(ostream& os, const AVLTree& avlTree) {
 
 }
 
-AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& newKey, size_t value) {
-    if (current == nullptr) {
-        current = new AVLNode(newKey, value);
-        return current;
-    }
-
-    if (newKey < current->key) {
-        return insertNode(current->left, newKey, value);
-    }
-
-    if (newKey > current->key) {
-        return insertNode(current->right, newKey, value);
-    }
-
-    return current;
-}
-
-bool AVLTree::insert(const std::string& key, size_t value) {
-    AVLNode*& inserted = insertNode(root, key, value);
-
-    rebalanceNode(inserted);
-    return true;
-}
-
-bool AVLTree::remove(const std::string& key) {
-
-}
-
-bool AVLTree::remove(AVLNode*& current, KeyType key) {
-    return false;
-}
-
-bool AVLTree::removeNode(AVLNode*& current){
-    if (!current) {
-        return false;
-    }
-
-    AVLNode* toDelete = current;
-    auto nChildren = current->numChildren();
-
-    // case 1 we can delete the node
-    if (current->isLeaf()) {
-        current = nullptr;
-    // case 2 - replace current with its only child
-    } else if (current->numChildren() == 1) {
-        if (current->right) {
-            current = current->right;
-        } else {
-            current = current->left;
-        }
-    // case 3 - we have two children,
-    // get the smallest key in right subtree by
-    // getting right child and go left until left is null
-    } else {
-        AVLNode* smallestInRight = current->right;
-        // I could check if smallestInRight is null,
-        // but it shouldn't be since the node has two children
-        while (smallestInRight->left) {
-            smallestInRight = smallestInRight->left;
-        }
-        std::string newKey = smallestInRight->key;
-        int newValue = smallestInRight->value;
-        remove(root, smallestInRight->key); // delete this one
-
-        current->key = newKey;
-        current->value = newValue;
-        current->height = current->getHeight();
-        balanceNode(current);
-
-        return true; // we already deleted the one we needed to so return
-    }
-    delete toDelete;
-
-    return true;
-}
-
-void AVLTree::balanceNode(AVLNode*& node) {
-    AVLNode*& hook = node;
-
-
-
-}
-
 void AVLTree::updateHeight(AVLNode*& parentNode) {
     int leftHeight = -1;
     if (parentNode->left) {
@@ -177,7 +91,6 @@ void AVLTree::updateHeight(AVLNode*& parentNode) {
     if (parentNode->right) {
         rightHeight = static_cast<int>(parentNode->right->height);
     }
-
     parentNode->height = max(leftHeight, rightHeight) + 1;
 }
 
@@ -191,7 +104,6 @@ int AVLTree::getBalance(AVLNode*& parentNode) {
     if (parentNode->right) {
         rightHeight = static_cast<int>(parentNode->right->height);
     }
-
     return leftHeight - rightHeight;
 }
 
@@ -209,7 +121,6 @@ bool AVLTree::setChild(AVLNode*& parent, const string& whichChild, AVLNode*& chi
     if (child) {
         child->parent = parent;
     }
-
     updateHeight(parent);
     return true;
 }
@@ -236,7 +147,6 @@ AVLTree::AVLNode* AVLTree::rotateRight(AVLNode*& node) {
 
     setChild(node->left, "right", node);
     setChild(node, "left", leftRightChild);
-
     return newRoot;
 }
 
@@ -253,7 +163,6 @@ AVLTree::AVLNode* AVLTree::rotateLeft(AVLNode*& node) {
 
     setChild(node->right, "left", node);
     setChild(node, "right", rightLeftChild);
-
     return newRoot;
 }
 
@@ -275,6 +184,86 @@ AVLTree::AVLNode* AVLTree::rebalanceNode(AVLNode*& node) {
         return rotateRight(node);
     }
     return node;
+}
+
+AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& newKey, size_t value) {
+    if (current == nullptr) {
+        current = new AVLNode(newKey, value);
+        return current;
+    }
+
+    if (newKey < current->key) {
+        return insertNode(current->left, newKey, value);
+    }
+
+    if (newKey > current->key) {
+        return insertNode(current->right, newKey, value);
+    }
+    return current;
+}
+
+bool AVLTree::insert(const std::string& key, size_t value) {
+    AVLNode*& inserted = insertNode(root, key, value);
+    rebalanceNode(inserted);
+    return true;
+}
+
+bool AVLTree::removeNode(AVLNode*& current) {
+    if (!current) {
+        return false;
+    }
+
+    AVLNode* toDelete = current;
+    AVLNode* parent = current->parent;
+    auto nChildren = current->numChildren();
+
+    // case 1 we can delete the node
+    if (current->isLeaf()) {
+        current = nullptr;
+    // case 2 - replace current with its only child
+    } else if (current->numChildren() == 1) {
+        if (current->right) {
+            current = current->right;
+        } else {
+            current = current->left;
+        }
+        current->parent = parent;
+    // case 3 - we have two children,
+    // get the smallest key in right subtree by
+    // getting right child and go left until left is null
+    } else {
+        AVLNode* smallestInRight = current->right;
+        // I could check if smallestInRight is null,
+        // but it shouldn't be since the node has two children
+        while (smallestInRight->left) {
+            smallestInRight = smallestInRight->left;
+        }
+
+        std::string newKey = smallestInRight->key;
+        int newValue = smallestInRight->value;
+        //remove(root, smallestInRight->key); // delete this one
+        removeNode(smallestInRight); // delete this one
+
+        current->key = newKey;
+        current->value = newValue;
+        updateHeight(current);
+
+        rebalanceNode(current);
+        return true; // we already deleted the one we needed to so return
+    }
+
+    while (parent) {
+        rebalanceNode(parent);
+        parent = parent->parent;
+    }
+
+    delete toDelete;
+    return true;
+}
+
+bool AVLTree::remove(const std::string& key) {
+    AVLNode* node = search(root, key);
+    removeNode(node);
 }
 
 bool AVLTree::contains(const std::string& key) const {

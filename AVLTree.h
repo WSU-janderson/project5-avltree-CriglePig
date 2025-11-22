@@ -91,9 +91,6 @@ class AVLTree {
 
     // removeNode contains the logic for actually removing a node based on the number of children
     bool removeNode(AVLNode*& current);
-
-    // You will implement this, but it is needed for removeNode()
-    void balanceNode(AVLNode*& node);
 };
 
 #endif //AVLTREE_H
