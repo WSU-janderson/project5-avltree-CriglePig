@@ -34,8 +34,21 @@ AVLTree::AVLTree() {
     treeSize = 0;
 }
 
-AVLTree::AVLTree(const AVLTree& other) {
+AVLTree::AVLNode* AVLTree::copyNode(const AVLNode* node, AVLNode* parent) {
+    if (!node) {
+        return nullptr;
+    }
+    AVLNode* newNode = new AVLNode(node->key, node->value);
+    newNode->parent = parent;
+    newNode->height = node->height;
+    newNode->left = copyNode(node->left, newNode);
+    newNode->right = copyNode(node->right, newNode);
+    return newNode;
+}
 
+AVLTree::AVLTree(const AVLTree& other) {
+    root = copyNode(other.root, nullptr);
+    treeSize = other.treeSize;
 }
 
 AVLTree::~AVLTree() {
