@@ -187,32 +187,34 @@ AVLTree::AVLNode* AVLTree::rebalanceNode(AVLNode*& node) {
     return node;
 }
 
-AVLTree::AVLNode*& AVLTree::insertNode(AVLNode*& current, const std::string& newKey, size_t value) {
+bool AVLTree::insertNode(AVLNode*& current, AVLNode* parent, const std::string& newKey, size_t value) {
     if (current == nullptr) {
         current = new AVLNode(newKey, value);
-        return current;
+        current->parent = parent;
+
+        AVLNode* node = current->parent;
+        while (node) {
+            AVLNode* nodeParent = node->parent;
+            rebalanceNode(node);
+            node = nodeParent;
+        }
+
+        treeSize++;
+        return true;
     }
 
     if (newKey < current->key) {
-        return insertNode(current->left, newKey, value);
+        return insertNode(current->left, current, newKey, value);
     }
 
     if (newKey > current->key) {
-        return insertNode(current->right, newKey, value);
+        return insertNode(current->right,current, newKey, value);
     }
-    return current;
+    return false;
 }
 
 bool AVLTree::insert(const std::string& key, size_t value) {
-    AVLNode*& inserted = insertNode(root, key, value);
-    AVLNode* node = inserted->parent;
-    while (node) {
-        AVLNode* parent = node->parent;
-        rebalanceNode(node);
-        node = parent;
-    }
-    treeSize++;
-    return true;
+    return insertNode(root,nullptr, key, value);
 }
 
 bool AVLTree::removeNode(AVLNode*& current) {

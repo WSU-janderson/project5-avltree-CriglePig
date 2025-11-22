@@ -69,7 +69,7 @@ class AVLTree {
     AVLNode* root;
     size_t treeSize;
 
-    AVLNode*& insertNode(AVLNode*& current, const std::string& newKey, size_t value);
+    bool insertNode(AVLNode*& current, AVLNode* parent, const std::string& newKey, size_t value);
 
     void updateHeight(AVLNode*& parentNode);
 
